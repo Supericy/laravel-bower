@@ -31,5 +31,24 @@ return [
 	| to the base URL automatically.
 	|
 	*/
-	'base_url' => ''
+	'base_url' => '',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Default Tag Generators
+	|--------------------------------------------------------------------------
+	|
+	*/
+	'generators' => [
+		[
+			'ext' => 'js',
+			'tag' => '<script src="%s" defer></script>'
+		],
+		[
+			'ext' => 'css',
+			'tag' => '<link rel="stylesheet" type="text/css" href="%s" />'
+		]
+	]
+
+
 ];

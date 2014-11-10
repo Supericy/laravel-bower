@@ -7,10 +7,25 @@
  * Time: 6:33 AM
  */
 
-abstract class TagGenerator {
+class TagGenerator {
 
-	abstract public function getExtension();
+	private $extension;
+	private $format;
 
-	abstract public function generateTag($path);
+	public function __construct($extension, $format)
+	{
+		$this->extension = $extension;
+		$this->format = $format;
+	}
+
+	public function getExtension()
+	{
+		return $this->extension;
+	}
+
+	public function generateTag($path)
+	{
+		return sprintf($this->format, $path);
+	}
 
 } 

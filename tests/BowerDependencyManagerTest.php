@@ -5,6 +5,7 @@ use Kosiec\LaravelBower\Dependency;
 use Kosiec\LaravelBower\Formatters\CssTagGenerator;
 use Kosiec\LaravelBower\Formatters\JavascriptTagGenerator;
 use Kosiec\LaravelBower\HtmlGenerator;
+use Kosiec\LaravelBower\TagGenerator;
 
 /**
  * Created by PhpStorm.
@@ -52,8 +53,8 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 	{
 		$htmlGenerator = new HtmlGenerator('http://homestead.app');
 
-		$htmlGenerator->add(new JavascriptTagGenerator());
-		$htmlGenerator->add(new CssTagGenerator());
+		$htmlGenerator->add(new TagGenerator('js', '<script src="%s"></script>'));
+		$htmlGenerator->add(new TagGenerator('css', '<link rel="stylesheet" type="text/css" href="%s" />'));
 
 		$javascriptDependency = new Dependency('dir/1/file.js');
 		$cssDependency = new Dependency('dir/1/file.css');

@@ -39,8 +39,10 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 			// @TODO load base url from somewhere
 			$generator = new HtmlGenerator($app['config']->get('laravel-bower::base_url'));
 
-			$generator->add(new JavascriptTagGenerator());
-			$generator->add(new CssTagGenerator());
+			array_walk($app['config']->get('laravel-bower::generators'), function ($entry) use ($generator)
+			{
+				$generator->add(new TagGenerator($entry['ext'], $entry['tag']));
+			});
 
 			return $generator;
 		});
