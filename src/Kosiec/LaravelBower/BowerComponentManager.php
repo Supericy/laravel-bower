@@ -62,10 +62,6 @@ class BowerComponentManager {
 
 			$sorted->push($component);
 		}
-		else
-		{
-//			throw new CyclicDependencyException();
-		}
 	}
 
 	/**
