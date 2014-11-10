@@ -49,7 +49,7 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 		{
 			$pattern = $compiler->createMatcher('includeBowerDependencies');
 
-			$components = $app->make('Kosiec\LaravelBower\BowerComponentManager')->gatherDependencies();
+			$components = $app->make('Kosiec\LaravelBower\BowerComponentManager')->gatherComponents();
 
 			$generator = $app->make('Kosiec\LaravelBower\HtmlGenerator');
 
