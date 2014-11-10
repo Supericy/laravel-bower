@@ -57,9 +57,4 @@ class Component {
 		return $this->dependencies;
 	}
 
-//	public function getExtension()
-//	{
-//		return substr($this->paths, strrpos($this->paths, '.') + 1);
-//	}
-
 }

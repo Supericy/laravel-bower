@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class HtmlGenerator {
 
 	/**
-	 * @var array
+	 * @var TagGenerator[]
 	 */
 	private $generators = [];
 
@@ -62,7 +62,8 @@ class HtmlGenerator {
 	 */
 	public function generateComponentTags(Component $component)
 	{
-		return $component->getPaths()->map(function ($path) use ($component)
+		return $this->filterByExtension($component->getPaths(), array_keys($this->generators))
+			->map(function ($path) use ($component)
 		{
 			return $this->generateTag($component->getName(), $path);
 		});
@@ -89,6 +90,14 @@ class HtmlGenerator {
 	private function getExtension($path)
 	{
 		return substr($path, strrpos($path, '.') + 1);
+	}
+
+	private function filterByExtension(Collection $paths, array $validExtensions)
+	{
+		return $paths->filter(function ($path) use ($validExtensions)
+		{
+			return in_array($this->getExtension($path), $validExtensions);
+		});
 	}
 
 }
