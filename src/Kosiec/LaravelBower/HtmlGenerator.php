@@ -46,14 +46,32 @@ class HtmlGenerator {
 
 	/**
 	 * @param Collection $components
+	 * @param bool $flatten
 	 * @return Collection
 	 */
-	public function generateAll(Collection $components)
+	public function generateAll(Collection $components, $flatten = true)
 	{
-		return $components->map(function (Component $component)
+		$collection = $components->map(function (Component $component)
 		{
 			return $this->generateComponentTags($component);
 		});
+
+		if ($flatten)
+			$collection = $this->flatten($collection);
+
+		return $collection;
+	}
+
+	private function flatten(Collection $components)
+	{
+		$tags = new Collection();
+
+		$components->each(function (Collection $componentTags) use (&$tags)
+		{
+			$tags = $tags->merge($componentTags);
+		});
+
+		return $tags;
 	}
 
 	/**
@@ -62,7 +80,7 @@ class HtmlGenerator {
 	 */
 	public function generateComponentTags(Component $component)
 	{
-		return $this->filterByExtension($component->getPaths(), array_keys($this->generators))
+		return $this->filterByExtension($component->getPaths())
 			->map(function ($path) use ($component)
 		{
 			return $this->generateTag($component->getName(), $path);
@@ -92,8 +110,10 @@ class HtmlGenerator {
 		return substr($path, strrpos($path, '.') + 1);
 	}
 
-	private function filterByExtension(Collection $paths, array $validExtensions)
+	private function filterByExtension(Collection $paths)
 	{
+		$validExtensions = array_keys($this->generators);
+
 		return $paths->filter(function ($path) use ($validExtensions)
 		{
 			return in_array($this->getExtension($path), $validExtensions);

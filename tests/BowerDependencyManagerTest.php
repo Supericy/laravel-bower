@@ -67,6 +67,41 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 	{
 		$htmlGenerator = new HtmlGenerator('http://homestead.app');
 
+		$htmlGenerator->add(new TagGenerator('js', '%s[JS]'));
+		$htmlGenerator->add(new TagGenerator('css', '%s[CSS]'));
+
+		$components = new Collection([
+			new Component('testcomp1', Collection::make(['testfile1.js', 'testfile2.css']), Collection::make([])),
+			new Component('testcomp2', Collection::make(['testfile1.js', 'testfile2.css']), Collection::make([])),
+		]);
+
+		$expected = new Collection([
+			new Collection([
+				'http://homestead.app/testcomp1/testfile1.js[JS]',
+				'http://homestead.app/testcomp1/testfile2.css[CSS]',
+			]),
+			new Collection([
+				'http://homestead.app/testcomp2/testfile1.js[JS]',
+				'http://homestead.app/testcomp2/testfile2.css[CSS]',
+			]),
+		]);
+
+		$expectedFlattened = new Collection([
+			'http://homestead.app/testcomp1/testfile1.js[JS]',
+			'http://homestead.app/testcomp1/testfile2.css[CSS]',
+			'http://homestead.app/testcomp2/testfile1.js[JS]',
+			'http://homestead.app/testcomp2/testfile2.css[CSS]',
+		]);
+
+		$this->assertEquals($expected, $htmlGenerator->generateAll($components, false));
+		$this->assertEquals($expectedFlattened, $htmlGenerator->generateAll($components, true));
+		$this->assertEquals($expectedFlattened, $htmlGenerator->generateAll($components));
+	}
+
+	public function testGenerateTagsForComponent()
+	{
+		$htmlGenerator = new HtmlGenerator('http://homestead.app');
+
 		$htmlGenerator->add(new TagGenerator('js', '<script src="%s"></script>'));
 		$htmlGenerator->add(new TagGenerator('css', '<link rel="stylesheet" type="text/css" href="%s" />'));
 
