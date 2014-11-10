@@ -6,11 +6,27 @@
  * Time: 6:14 PM
  */
 
-//dd('loading config');
-
 return [
+	/*
+	|--------------------------------------------------------------------------
+	| Bower Component Directory
+	|--------------------------------------------------------------------------
+	|
+	| Let the manager know where you have your scripts currently installed.
+	|
+	*/
+	'bower_directory' => app_path() . '/public/bower_components',
 
-	'bower_directory' => 'bower',
-
-	'base_url' => \URL::to('/')
+	/*
+	|--------------------------------------------------------------------------
+	| Base URL for all dependencies
+	|--------------------------------------------------------------------------
+	|
+	| The base URL for your website, eg. http://localhost.
+	|
+	| Note that you can also leave it as '', which makes your scripts relative
+	| to the base URL automatically.
+	|
+	*/
+	'base_url' => ''
 ];
