@@ -1,0 +1,21 @@
+{
+    "name": "kosiec/laravel-bower",
+    "description": "",
+    "authors": [
+        {
+            "name": "Chad Kosie",
+            "email": "chad.kosie@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*",
+        "illuminate/console": "4.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kosiec\\": "src/Kosiec"
+        }
+    },
+    "minimum-stability": "stable"
+}
