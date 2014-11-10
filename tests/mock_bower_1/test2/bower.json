@@ -1,4 +1,5 @@
 {
+	"name": "test2",
 	"main": [
 		"d2.js",
 		"d3.css"

@@ -78,23 +78,15 @@ class BowerComponentManager {
 	 */
 	private function createComponentFromBowerFile($path)
 	{
-		$componentName = $this->getComponentName($path);
+		$bower = json_decode(file_get_contents($path), true);
 
-		$data = json_decode(file_get_contents($path), true);
-
-		$files = Collection::make(isset($data['main']) ? $data['main'] : []);
-		$dependencies = Collection::make(isset($data['dependencies']) ? array_keys($data['dependencies']) : []);
+		$componentName = $bower['name'];
+		$files = Collection::make(isset($bower['main']) ? $bower['main'] : []);
+		$dependencies = Collection::make(isset($bower['dependencies']) ? array_keys($bower['dependencies']) : []);
 
 		$component = new Component($componentName, $files, $dependencies);
 
 		return $component;
-	}
-
-	private function getComponentName($path)
-	{
-		$temp = substr($path, strlen($this->componentDirectory));
-
-		return substr($temp, 0, strrpos($temp, '/'));
 	}
 
 	private function findAllBowerFiles()
