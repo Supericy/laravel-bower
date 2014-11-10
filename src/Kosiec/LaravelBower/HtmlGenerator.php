@@ -10,24 +10,44 @@ use Illuminate\Support\Collection;
 
 class HtmlGenerator {
 
+	/**
+	 * @var array
+	 */
 	private $generators = [];
+
+	/**
+	 * @var string
+	 */
 	private $baseUrl;
 
+	/**
+	 * @param $baseUrl
+	 */
 	public function __construct($baseUrl)
 	{
 		$this->baseUrl = rtrim($baseUrl, '/') . '/';
 	}
 
+	/**
+	 * @param TagGenerator $generator
+	 */
 	public function add(TagGenerator $generator)
 	{
 		$this->generators[$generator->getExtension()] = $generator;
 	}
 
+	/**
+	 * @param TagGenerator $generator
+	 */
 	public function remove(TagGenerator $generator)
 	{
 		unset($this->generators[$generator->getExtension()]);
 	}
 
+	/**
+	 * @param Collection $components
+	 * @return Collection
+	 */
 	public function generateAll(Collection $components)
 	{
 		return $components->map(function (Component $component)
@@ -36,6 +56,10 @@ class HtmlGenerator {
 		});
 	}
 
+	/**
+	 * @param Component $component
+	 * @return Component
+	 */
 	public function generateComponentTags(Component $component)
 	{
 		return $component->getPaths()->map(function ($path) use ($component)
@@ -44,6 +68,12 @@ class HtmlGenerator {
 		});
 	}
 
+	/**
+	 * @param $componentName
+	 * @param $path
+	 * @return string
+	 * @throws GeneratorException
+	 */
 	public function generateTag($componentName, $path)
 	{
 		$ext = $this->getExtension($path);
