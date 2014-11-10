@@ -52,20 +52,20 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 
 	public function testGeneratingTags()
 	{
-		$htmlGenerator = new HtmlGenerator('http://homestead.app');
+		$htmlGenerator = new HtmlGenerator('http://homestead.app', 'bower_dir');
 
 		$htmlGenerator->add(new TagGenerator('js', '<script src="%s"></script>'));
 		$htmlGenerator->add(new TagGenerator('css', '<link rel="stylesheet" type="text/css" href="%s" />'));
 
-		$this->assertSame('<script src="http://homestead.app/test1/file1.js"></script>', $htmlGenerator->generateTag('test1', 'file1.js'));
-		$this->assertSame('<link rel="stylesheet" type="text/css" href="http://homestead.app/test2/file2.css" />', $htmlGenerator->generateTag('test2', 'file2.css'));
+		$this->assertSame('<script src="http://homestead.app/bower_dir/test1/file1.js"></script>', $htmlGenerator->generateTag('test1', 'file1.js'));
+		$this->assertSame('<link rel="stylesheet" type="text/css" href="http://homestead.app/bower_dir/test2/file2.css" />', $htmlGenerator->generateTag('test2', 'file2.css'));
 
 		$this->assertException(function () use ($htmlGenerator) { $htmlGenerator->generateTag('test3', 'file3.unsupported'); }, '\Kosiec\LaravelBower\GeneratorException');
 	}
 
 	public function testGeneratingAllTagsForComponent()
 	{
-		$htmlGenerator = new HtmlGenerator('http://homestead.app');
+		$htmlGenerator = new HtmlGenerator('http://homestead.app', 'bower_dir');
 
 		$htmlGenerator->add(new TagGenerator('js', '%s[JS]'));
 		$htmlGenerator->add(new TagGenerator('css', '%s[CSS]'));
@@ -77,20 +77,20 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 
 		$expected = new Collection([
 			new Collection([
-				'http://homestead.app/testcomp1/testfile1.js[JS]',
-				'http://homestead.app/testcomp1/testfile2.css[CSS]',
+				'http://homestead.app/bower_dir/testcomp1/testfile1.js[JS]',
+				'http://homestead.app/bower_dir/testcomp1/testfile2.css[CSS]',
 			]),
 			new Collection([
-				'http://homestead.app/testcomp2/testfile1.js[JS]',
-				'http://homestead.app/testcomp2/testfile2.css[CSS]',
+				'http://homestead.app/bower_dir/testcomp2/testfile1.js[JS]',
+				'http://homestead.app/bower_dir/testcomp2/testfile2.css[CSS]',
 			]),
 		]);
 
 		$expectedFlattened = new Collection([
-			'http://homestead.app/testcomp1/testfile1.js[JS]',
-			'http://homestead.app/testcomp1/testfile2.css[CSS]',
-			'http://homestead.app/testcomp2/testfile1.js[JS]',
-			'http://homestead.app/testcomp2/testfile2.css[CSS]',
+			'http://homestead.app/bower_dir/testcomp1/testfile1.js[JS]',
+			'http://homestead.app/bower_dir/testcomp1/testfile2.css[CSS]',
+			'http://homestead.app/bower_dir/testcomp2/testfile1.js[JS]',
+			'http://homestead.app/bower_dir/testcomp2/testfile2.css[CSS]',
 		]);
 
 		$this->assertEquals($expected, $htmlGenerator->generateAll($components, false));
@@ -100,7 +100,7 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 
 	public function testGenerateTagsForComponent()
 	{
-		$htmlGenerator = new HtmlGenerator('http://homestead.app');
+		$htmlGenerator = new HtmlGenerator('http://homestead.app', 'bower_dir');
 
 		$htmlGenerator->add(new TagGenerator('js', '<script src="%s"></script>'));
 		$htmlGenerator->add(new TagGenerator('css', '<link rel="stylesheet" type="text/css" href="%s" />'));
@@ -108,8 +108,8 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 		$component = new Component('testcomp', Collection::make(['testfile1.js', 'testfile2.css']), Collection::make([]));
 
 		$expected = new Collection([
-			'<script src="http://homestead.app/testcomp/testfile1.js"></script>',
-			'<link rel="stylesheet" type="text/css" href="http://homestead.app/testcomp/testfile2.css" />'
+			'<script src="http://homestead.app/bower_dir/testcomp/testfile1.js"></script>',
+			'<link rel="stylesheet" type="text/css" href="http://homestead.app/bower_dir/testcomp/testfile2.css" />'
 		]);
 
 		$this->assertEquals($expected, $htmlGenerator->generateComponentTags($component));

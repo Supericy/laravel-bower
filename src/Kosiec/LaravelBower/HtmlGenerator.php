@@ -19,13 +19,16 @@ class HtmlGenerator {
 	 * @var string
 	 */
 	private $baseUrl;
+	private $bowerComponentDir;
 
 	/**
 	 * @param $baseUrl
+	 * @param $bowerComponentDir
 	 */
-	public function __construct($baseUrl)
+	public function __construct($baseUrl, $bowerComponentDir)
 	{
 		$this->baseUrl = rtrim($baseUrl, '/') . '/';
+		$this->bowerComponentDir = rtrim($bowerComponentDir, '/') . '/';
 	}
 
 	/**
@@ -102,7 +105,7 @@ class HtmlGenerator {
 
 		$generator = $this->generators[$ext];
 
-		return $generator->generateTag($this->baseUrl . $componentName . '/' . $path);
+		return $generator->generateTag($this->baseUrl . $this->bowerComponentDir . $componentName . '/' . $path);
 	}
 
 	private function getExtension($path)

@@ -34,7 +34,9 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 
 		$this->app->bind('Kosiec\LaravelBower\HtmlGenerator', function ($app)
 		{
-			$generator = new HtmlGenerator($app['config']->get('laravel-bower::base_url'));
+			$generator = new HtmlGenerator(
+				$app['config']->get('laravel-bower::base_url'),
+				$app['config']->get('laravel-bower::bower_component_dir'));
 
 			$generatorConfig = $app['config']->get('laravel-bower::generators');
 
