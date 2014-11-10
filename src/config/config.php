@@ -14,6 +14,9 @@ return [
 	|
 	| Let the manager know where you have your scripts currently installed.
 	|
+	| Note: These files must be in your web root (ie. your public/ directory),
+	| otherwise they will not be accessible.
+	|
 	*/
 	'bower_directory' => app_path() . '/public/bower_components',
 
