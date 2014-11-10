@@ -1,6 +1,6 @@
 {
     "name": "kosiec/laravel-bower",
-    "description": "",
+    "description": "Generates HTML tags for all of your installed bower dependencies",
     "authors": [
         {
             "name": "Chad Kosie",
