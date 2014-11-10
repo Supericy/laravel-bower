@@ -28,6 +28,14 @@ class HtmlGenerator {
 		unset($this->generators[$generator->getExtension()]);
 	}
 
+	public function generateAll(Collection $components)
+	{
+		return $components->map(function (Component $component)
+		{
+			return $this->generateComponentTags($component);
+		});
+	}
+
 	public function generateComponentTags(Component $component)
 	{
 		return $component->getPaths()->map(function ($path) use ($component)

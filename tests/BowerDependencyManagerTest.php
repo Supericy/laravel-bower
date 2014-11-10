@@ -37,6 +37,7 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 		$expected = new Collection([
 			new Component('angular', Collection::make(['./angular.js']), Collection::make([])),
 			new Component('angular-route', Collection::make(['./angular-route.js']), Collection::make(['angular'])),
+
 			new Component('jquery', Collection::make(['dist/jquery.js']), Collection::make([])),
 
 			new Component('bootstrap', Collection::make([

@@ -20,7 +20,7 @@ return [
 	| public directory.
 	|
 	*/
-	'bower_component_dir' => '/bower_components',
+	'bower_component_dir' => 'bower_components',
 
 	/*
 	|--------------------------------------------------------------------------

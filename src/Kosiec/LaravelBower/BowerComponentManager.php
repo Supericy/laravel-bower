@@ -36,6 +36,14 @@ class BowerComponentManager {
 		return $this->sort($components);
 	}
 
+	// sort based on http://stackoverflow.com/questions/4106862/how-to-sort-depended-objects-by-dependency
+	/**
+	 * Sorts the given components based on any dependencies they have, so that dependencies are loaded before the
+	 * component.
+	 *
+	 * @param $components
+	 * @return Collection
+	 */
 	private function sort($components)
 	{
 		$sorted = new Collection();

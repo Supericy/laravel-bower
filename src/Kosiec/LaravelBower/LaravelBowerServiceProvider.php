@@ -37,7 +37,9 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 			// @TODO load base url from somewhere
 			$generator = new HtmlGenerator($app['config']->get('laravel-bower::base_url'));
 
-			array_walk($app['config']->get('laravel-bower::generators'), function ($entry) use ($generator)
+			$generatorConfig = $app['config']->get('laravel-bower::generators');
+
+			array_walk($generatorConfig, function ($entry) use ($generator)
 			{
 				$generator->add(new TagGenerator($entry['ext'], $entry['tag']));
 			});
@@ -47,13 +49,13 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 
 		\Blade::extend(function ($view, $compiler) use ($app)
 		{
-			$pattern = $compiler->createMatcher('includeBowerDependencies');
-
-			$components = $app->make('Kosiec\LaravelBower\BowerComponentManager')->gatherComponents();
-
+			$manager = $app->make('Kosiec\LaravelBower\BowerComponentManager');
 			$generator = $app->make('Kosiec\LaravelBower\HtmlGenerator');
 
-			$tags = $generator->generateComponentTags($components);
+			$components = $manager->gatherDependencies();
+			$tags = $generator->generateAll($components);
+
+			$pattern = $compiler->createMatcher('includeBowerDependencies');
 
 			return preg_replace($pattern, $tags->reduce(function ($left, $right)
 			{
