@@ -1,9 +1,7 @@
 <?php
 use Illuminate\Support\Collection;
-use Kosiec\LaravelBower\BowerDependencyManager;
-use Kosiec\LaravelBower\Dependency;
-use Kosiec\LaravelBower\Formatters\CssTagGenerator;
-use Kosiec\LaravelBower\Formatters\JavascriptTagGenerator;
+use Kosiec\LaravelBower\BowerComponentManager;
+use Kosiec\LaravelBower\Component;
 use Kosiec\LaravelBower\HtmlGenerator;
 use Kosiec\LaravelBower\TagGenerator;
 
@@ -18,35 +16,37 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 
 	public function testGetAllDependenciesFromBower1()
 	{
-		/** @var BowerDependencyManager $dependencyManager */
-		$dependencyManager = new BowerDependencyManager('tests/mock_bower_1/');
+		/** @var BowerComponentManager $dependencyManager */
+		$dependencyManager = new BowerComponentManager('tests/mock_bower_1/');
 
 		$expected = new Collection([
-			new Dependency('tests/mock_bower_1/test1/d1.js'),
-			new Dependency('tests/mock_bower_1/test2/d2.js'),
-			new Dependency('tests/mock_bower_1/test2/d3.css')
+			new Component('test1', Collection::make(['d1.js']), Collection::make([])),
+			new Component('test2', Collection::make(['d2.js', 'd3.css']), Collection::make([]))
 		]);
 
-		$this->assertEquals($expected, $dependencyManager->gatherDependencies());
+		$this->assertEquals($expected, $dependencyManager->gatherComponents());
 	}
 
 	public function testGetAllDependenciesFromBower2()
 	{
-		/** @var BowerDependencyManager $dependencyManager */
-		$dependencyManager = new BowerDependencyManager('tests/mock_bower_2/');
+		/** @var BowerComponentManager $componentManager */
+		$componentManager = new BowerComponentManager('tests/mock_bower_2/');
 
-		$dependencies = $dependencyManager->gatherDependencies();
+		$components = $componentManager->gatherComponents();
 
 		$expected = new Collection([
-			new Dependency('tests/mock_bower_2/angular-route/./angular-route.js'),
-			new Dependency('tests/mock_bower_2/angular/./angular.js'),
-			new Dependency('tests/mock_bower_2/bootstrap/./dist/css/bootstrap.css'),
-			new Dependency('tests/mock_bower_2/bootstrap/./dist/js/bootstrap.js'),
-			new Dependency('tests/mock_bower_2/jquery/dist/jquery.js')
+			new Component('angular', Collection::make(['./angular.js']), Collection::make([])),
+			new Component('angular-route', Collection::make(['./angular-route.js']), Collection::make(['angular'])),
+			new Component('jquery', Collection::make(['dist/jquery.js']), Collection::make([])),
+
+			new Component('bootstrap', Collection::make([
+				'./dist/css/bootstrap.css',
+				'./dist/js/bootstrap.js'
+			]), Collection::make(['jquery']))
 		]);
 
-		$this->assertEquals($expected->count(), count($dependencies));
-		$this->assertEquals($expected, $dependencies);
+		$this->assertEquals($expected->count(), count($components));
+		$this->assertEquals($expected, $components);
 	}
 
 	public function testGeneratingTags()
@@ -56,14 +56,27 @@ class BowerDependencyManagerTestCase extends AbstractTestCase {
 		$htmlGenerator->add(new TagGenerator('js', '<script src="%s"></script>'));
 		$htmlGenerator->add(new TagGenerator('css', '<link rel="stylesheet" type="text/css" href="%s" />'));
 
-		$javascriptDependency = new Dependency('dir/1/file.js');
-		$cssDependency = new Dependency('dir/1/file.css');
-		$unsupportedDependency = new Dependency('dir/1/file.unsupportedext');
+		$this->assertSame('<script src="http://homestead.app/test1/file1.js"></script>', $htmlGenerator->generateTag('test1', 'file1.js'));
+		$this->assertSame('<link rel="stylesheet" type="text/css" href="http://homestead.app/test2/file2.css" />', $htmlGenerator->generateTag('test2', 'file2.css'));
 
-		$this->assertSame('<script src="http://homestead.app/dir/1/file.js"></script>', $htmlGenerator->generateTag($javascriptDependency));
-		$this->assertSame('<link rel="stylesheet" type="text/css" href="http://homestead.app/dir/1/file.css" />', $htmlGenerator->generateTag($cssDependency));
+		$this->assertException(function () use ($htmlGenerator) { $htmlGenerator->generateTag('test3', 'file3.unsupported'); }, '\Kosiec\LaravelBower\GeneratorException');
+	}
 
-		$this->assertException(function () use ($htmlGenerator, $unsupportedDependency) { $htmlGenerator->generateTag($unsupportedDependency); }, '\Kosiec\LaravelBower\GeneratorException');
+	public function testGeneratingAllTagsForComponent()
+	{
+		$htmlGenerator = new HtmlGenerator('http://homestead.app');
+
+		$htmlGenerator->add(new TagGenerator('js', '<script src="%s"></script>'));
+		$htmlGenerator->add(new TagGenerator('css', '<link rel="stylesheet" type="text/css" href="%s" />'));
+
+		$component = new Component('testcomp', Collection::make(['testfile1.js', 'testfile2.css']), Collection::make([]));
+
+		$expected = new Collection([
+			'<script src="http://homestead.app/testcomp/testfile1.js"></script>',
+			'<link rel="stylesheet" type="text/css" href="http://homestead.app/testcomp/testfile2.css" />'
+		]);
+
+		$this->assertEquals($expected, $htmlGenerator->generateComponentTags($component));
 	}
 
 }

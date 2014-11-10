@@ -28,10 +28,10 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 	{
 		$app = $this->app;
 
-		$this->app->bind('Kosiec\LaravelBower\BowerDependencyManager', function ($app)
+		$this->app->bind('Kosiec\LaravelBower\BowerComponentManager', function ($app)
 		{
 			// @TODO load directory from config
-			return new BowerDependencyManager($app['config']->get('laravel-bower::bower_directory'));
+			return new BowerComponentManager($app['config']->get('laravel-bower::bower_component_dir'));
 		});
 
 		$this->app->bind('Kosiec\LaravelBower\HtmlGenerator', function ($app)
@@ -51,7 +51,7 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 		{
 			$pattern = $compiler->createMatcher('includeBowerDependencies');
 
-			$dependencies = $app->make('Kosiec\LaravelBower\BowerDependencyManager')->gatherDependencies();
+			$dependencies = $app->make('Kosiec\LaravelBower\BowerComponentManager')->gatherDependencies();
 
 			$generator = $app->make('Kosiec\LaravelBower\HtmlGenerator');
 

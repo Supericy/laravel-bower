@@ -7,6 +7,7 @@
  */
 
 return [
+
 	/*
 	|--------------------------------------------------------------------------
 	| Bower Component Directory
@@ -15,10 +16,11 @@ return [
 	| Let the manager know where you have your scripts currently installed.
 	|
 	| Note: These files must be in your web root (ie. your public/ directory),
-	| otherwise they will not be accessible.
+	| otherwise they will not be accessible. This dir is relative to your
+	| public directory.
 	|
 	*/
-	'bower_directory' => app_path() . '/public/bower_components',
+	'bower_component_dir' => '/bower_components',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -42,13 +44,12 @@ return [
 	'generators' => [
 		[
 			'ext' => 'js',
-			'tag' => '<script src="%s" defer></script>'
+			'tag' => '<script src="%s"></script>'
 		],
 		[
 			'ext' => 'css',
 			'tag' => '<link rel="stylesheet" type="text/css" href="%s" />'
 		]
 	]
-
 
 ];

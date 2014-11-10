@@ -28,22 +28,29 @@ class HtmlGenerator {
 		unset($this->generators[$generator->getExtension()]);
 	}
 
-	public function generateTag(Dependency $dependency)
+	public function generateComponentTags(Component $component)
 	{
-		if (!array_key_exists($dependency->getExtension(), $this->generators))
-			throw new GeneratorException('No formatter found for extension "' . $dependency->getExtension() . '"');
-
-		$generator = $this->generators[$dependency->getExtension()];
-
-		return $generator->generateTag($this->baseUrl . $dependency->getPath());
+		return $component->getPaths()->map(function ($path) use ($component)
+		{
+			return $this->generateTag($component->getName(), $path);
+		});
 	}
 
-	public function generateTags(Collection $dependencies)
+	public function generateTag($componentName, $path)
 	{
-		return $dependencies->map(function (Dependency $dependency)
-		{
-			return $this->generateTag($dependency);
-		});
+		$ext = $this->getExtension($path);
+
+		if (!array_key_exists($ext, $this->generators))
+			throw new GeneratorException('No formatter found for extension "' . $ext . '"');
+
+		$generator = $this->generators[$ext];
+
+		return $generator->generateTag($this->baseUrl . $componentName . '/' . $path);
+	}
+
+	private function getExtension($path)
+	{
+		return substr($path, strrpos($path, '.') + 1);
 	}
 
 }
