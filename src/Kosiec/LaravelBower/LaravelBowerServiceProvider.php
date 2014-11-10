@@ -1,7 +1,5 @@
 <?php namespace Kosiec\LaravelBower;
 use Illuminate\Support\ServiceProvider;
-use Kosiec\LaravelBower\Formatters\CssTagGenerator;
-use Kosiec\LaravelBower\Formatters\JavascriptTagGenerator;
 
 /**
  * Created by PhpStorm.
@@ -51,11 +49,11 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 		{
 			$pattern = $compiler->createMatcher('includeBowerDependencies');
 
-			$dependencies = $app->make('Kosiec\LaravelBower\BowerComponentManager')->gatherDependencies();
+			$components = $app->make('Kosiec\LaravelBower\BowerComponentManager')->gatherDependencies();
 
 			$generator = $app->make('Kosiec\LaravelBower\HtmlGenerator');
 
-			$tags = $generator->generateTags($dependencies);
+			$tags = $generator->generateComponentTags($components);
 
 			return preg_replace($pattern, $tags->reduce(function ($left, $right)
 			{
