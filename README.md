@@ -19,5 +19,21 @@ however, if you wish to change the configuration, you can public the config via:
 
     php artisan config:publish kosiec/laravel-bower
 
-(Keep in mind, it's best to keep your dependencies inside your public folder, as anything outside of it may not be
+(Keep in mind, it's best to keep your bower components inside your public folder, as anything outside of it may not be
 accessible from the web.
+
+## Usage
+
+Simply add your blade tag (default is `includeBowerComponents`) to your master template, either in your header or at
+the bottom of your body.
+
+    // example: master-layout.blade.php
+    <html>
+        <header>
+            @includeBowerComponents()
+        </header>
+        
+        <body> ... </body
+    <html>
+
+If you wish to use a different blade tag, you can change it within the config.
