@@ -59,7 +59,8 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 			$components = $manager->gatherComponents();
 			$tags = $generator->generateAll($components);
 
-			$pattern = $compiler->createMatcher('includeBowerDependencies');
+//			$pattern = $compiler->createMatcher('includeBowerDependencies');
+			$pattern = $compiler->createMatcher($app['config']->get('laravel-bower::blade_tag'));
 
 			return preg_replace($pattern, $tags->reduce(function ($left, $right)
 			{
