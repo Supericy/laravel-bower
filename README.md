@@ -26,14 +26,24 @@ accessible from the web.
 ## Usage
 
 Simply add your blade tag (default is `includeBowerComponents`) to your master template, either in your header or at
+<<<<<<< HEAD
 the bottom of your body. Example:
 
     // master-layout.blade.php
+=======
+the bottom of your body.
+
+    // example: master-layout.blade.php
+>>>>>>> 953f2a1d641b9dbc4cbed610d04428d592093654
     <html>
         <header>
             @includeBowerComponents()
         </header>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 953f2a1d641b9dbc4cbed610d04428d592093654
         <body> ... </body
     <html>
 
