@@ -33,6 +33,7 @@ class BowerComponentManager {
 			$components[$component->getName()] = $component;
 		}
 
+		// order components such that each components dependencies will be resolved properly
 		return $this->sort($components);
 	}
 

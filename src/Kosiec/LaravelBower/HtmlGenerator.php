@@ -48,6 +48,19 @@ class HtmlGenerator {
 	}
 
 	/**
+	 * @return array Extensions currently supported/added
+	 */
+	public function getSupportedExtensions()
+	{
+		$extensions = [];
+		foreach ($this->generators as $generator)
+		{
+			$extensions[] = $generator->getExtension();
+		}
+		return $extensions;
+	}
+
+	/**
 	 * @param Collection $components
 	 * @param bool $flatten
 	 * @return Collection

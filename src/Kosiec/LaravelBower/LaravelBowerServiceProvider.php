@@ -1,6 +1,5 @@
 <?php namespace Kosiec\LaravelBower;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Collection;
 
 /**
  * Created by PhpStorm.
@@ -27,12 +26,7 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 	{
 		$app = $this->app;
 
-		$this->app->bind('Kosiec\LaravelBower\BowerComponentManager', function ($app)
-		{
-			return new BowerComponentManager($app['config']->get('laravel-bower::bower_component_dir'));
-		});
-
-		$this->app->bind('Kosiec\LaravelBower\HtmlGenerator', function ($app)
+		$this->app->singleton('Kosiec\LaravelBower\HtmlGenerator', function ($app)
 		{
 			$generator = new HtmlGenerator(
 				$app['config']->get('laravel-bower::base_url'),
@@ -46,6 +40,16 @@ class LaravelBowerServiceProvider extends ServiceProvider {
 			});
 
 			return $generator;
+		});
+
+		$this->app->singleton('Kosiec\LaravelBower\BowerComponentManager', function ($app)
+		{
+			/** @var HtmlGenerator $generator */
+			$generator = $app->make('Kosiec\LaravelBower\HtmlGenerator');
+
+			return new BowerComponentManager(
+				$app['config']->get('laravel-bower::bower_component_dir'),
+				$generator->getSupportedExtensions());
 		});
 
 		\Blade::extend(function ($view, $compiler) use ($app)
