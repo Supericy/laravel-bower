@@ -13,7 +13,7 @@ Require this package with composer:
 
 After updating composer, add the LaravelBowerServiceProvider to your providers array in app/config/app.php
 
-    'Kosiec\LaravelBower\LaravelBowerServiceProvider'
+    'Kosiec\LaravelBower\LaravelBowerServiceProvider',
 
 Out of the box, the service will look inside `public/bower_components` directory for all of your frontend assets,
 however, if you wish to change the configuration, you can public the config via:
@@ -25,14 +25,14 @@ accessible from the web.
 
 ## Usage
 
-Simply add your blade tag (default is `includeBowerComponents`) to your master template, either in your header or at
+Simply add your blade tag (default is `includeBowerDependencies`) to your master template, either in your header or at
 the bottom of your body. Example:
 
     // master-layout.blade.php
     <html>
-        <header>
-            @includeBowerComponents()
-        </header>
+        <head>
+            @includeBowerDependencies()
+        </head>
 
         <body> ... </body
     <html>
